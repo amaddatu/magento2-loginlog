@@ -10,6 +10,9 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * The purpose of this class to capture the login event and save remote IP address information for a customer
+ */
 class CustomerLoginEventObserver implements ObserverInterface
 {
     /**
@@ -29,8 +32,8 @@ class CustomerLoginEventObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        // $logger = $this->_context->getLogger();
-        // $logger->addDebug("Customer Login Event");
+        $logger = $this->_context->getLogger();
+        $logger->addDebug("Customer Login Event");
         $customer = $observer->getEvent()->getCustomer();
         $remote_address = $this->_context->getRemoteAddress()->getRemoteAddress();
         $customer_id = $customer->getId();
