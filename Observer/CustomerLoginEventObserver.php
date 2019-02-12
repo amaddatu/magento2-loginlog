@@ -33,10 +33,15 @@ class CustomerLoginEventObserver implements ObserverInterface
     public function execute(Observer $observer)
     {
         $logger = $this->_context->getLogger();
-        $logger->addDebug("Customer Login Event");
+        // $logger->addDebug("Customer Login Event");
         $customer = $observer->getEvent()->getCustomer();
         $remote_address = $this->_context->getRemoteAddress()->getRemoteAddress();
         $customer_id = $customer->getId();
+        $logger->addDebug(print_r([
+            "name" => "Customer Login Event",
+            "customer_id" => $customer_id,
+            "remote_address" => $remote_address
+        ], true));
         // $logger->addDebug($customer->getName()); //Get customer name
 
         // echo get_class($logger);
