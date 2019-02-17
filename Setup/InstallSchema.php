@@ -22,8 +22,9 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
         
         //START table setup
+        $events_table_name = 'am_loginlog_events';
         $table = $installer->getConnection()->newTable(
-        $installer->getTable('am_loginlog_events')
+            $installer->getTable($events_table_name)
         )->addColumn(
             'id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -63,11 +64,38 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'user_agent',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            512,
+            255,
             [ 'nullable' => false, ],
             'User Agent'
+        )->addColumn(
+            'user_agent_full',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            512,
+            [ 'nullable' => false, ],
+            'User Agent Full String'
         );
         $installer->getConnection()->createTable($table);
+        $installer->getConnection()->addIndex(
+            $installer->getTable($events_table_name),
+            $installer->getIdxName($events_table_name, ['event_time']),
+            ['event_time']
+        );
+        $installer->getConnection()->addIndex(
+            $installer->getTable($events_table_name),
+            $installer->getIdxName($events_table_name, ['event_type']),
+            ['event_type']
+        );
+        $installer->getConnection()->addIndex(
+            $installer->getTable($events_table_name),
+            $installer->getIdxName($events_table_name, ['store_id','customer_id']),
+            ['store_id', 'customer_id']
+        );
+        $installer->getConnection()->addIndex(
+            $installer->getTable($events_table_name),
+            $installer->getIdxName($events_table_name, ['user_agent']),
+            ['user_agent']
+        );
+        
         //END table setup
         $installer->endSetup();
     }
