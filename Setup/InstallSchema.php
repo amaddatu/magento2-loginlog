@@ -95,6 +95,12 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName($events_table_name, ['user_agent']),
             ['user_agent']
         );
+
+        $installer->getConnection()->addIndex(
+            $installer->getTable($events_table_name),
+            $installer->getIdxName($events_table_name, ['remote_ip']),
+            ['remote_ip']
+        );
         
         //END table setup
         $installer->endSetup();
